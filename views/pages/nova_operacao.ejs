@@ -1,31 +1,47 @@
-<div class="div-form">
-    <form action="/salvar_operacao" method="POST">
-        <div>
-            <label for="inputData">Data</label>
-            <input type="date" name="data" id="inputData" required>
+<div class="container mt-5 animate-fade-in">
+  <div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+      <div class="card shadow">
+        <div class="card-body">
+          <h3 class="card-title text-center mb-4">Nova Operação</h3>
+          <form action="/salvar_operacao" method="POST">
+            <div class="mb-3">
+              <label for="inputData" class="form-label">Data</label>
+              <input type="date" class="form-control" name="data" id="inputData" required>
+            </div>
+            <div class="mb-3">
+              <label for="inputAtivo" class="form-label">Código do ativo</label>
+              <input type="text" class="form-control" name="ativo" id="inputAtivo" placeholder="Código do ativo" required pattern="[A-Z]{4}\d{1,2}">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Tipo de operação</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="tipoDeOperacao" id="inputTipoCompra" value="compra" checked>
+                <label class="form-check-label" for="inputTipoCompra">Compra</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="tipoDeOperacao" id="inputTipoVenda" value="venda">
+                <label class="form-check-label" for="inputTipoVenda">Venda</label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="inputQuantidade" class="form-label">Quantidade</label>
+              <input type="number" class="form-control" name="quantidade" id="inputQuantidade" required min="1" step="1">
+            </div>
+            <div class="mb-3">
+              <label for="inputPreco" class="form-label">Preço unitário</label>
+              <input type="number" class="form-control" name="preco" id="inputPreco" required min="0.01" step="0.01">
+            </div>
+            <button type="submit" class="btn btn-success w-100 animate-bounce">Registrar operação</button>
+          </form>
         </div>
-        <div>
-            <label for="inputTipo">Código do ativo</label>
-            <input type="text" name="ativo" id="inputAtivo" placeholder="Código do ativo" required>   
-        </div>
-        <div class="radio-group">
-            <label for="inputTipo">Tipo de operação:</label>
-            <br><br>
-            <input type="radio" name="tipoDeOperacao" id="inputTipoCompra" value="compra" checked>
-            <label for="inputTipoCompra">Compra</label>
-            <input type="radio" name="tipoDeOperacao" id="inputTipoVenda" value="venda">
-            <label for="inputTipoVenda">Venda</label>
-        </div>
-        <div>
-            <label for="inputQuantidade">Quantidade</label>
-            <input type="number" name="quantidade" id="inputQuantidade" required min="1" step="1">
-        </div>
-        <div>
-            <label for="inputPreco">Preço unitário</label>
-            <input type="number" name="preco" id="inputPreco" required min="0.01" step="0.01">
-        </div>
-        <div>
-            <input type="submit" value="Registrar operação">
-        </div>
-    </form>
+      </div>
+    </div>
+  </div>
 </div>
+<style>
+.animate-fade-in { animation: fadeIn 1.2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
+.animate-bounce { transition: transform 0.2s; }
+.animate-bounce:hover { transform: translateY(-4px) scale(1.04); }
+</style>

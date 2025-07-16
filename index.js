@@ -38,6 +38,9 @@ app.use(session({
     cookie: { maxAge: 1000 * 60 * 60 } // 1 hora
 }))
 
+const flash = require('connect-flash');
+app.use(flash());
+
 app.use('/', router)
 
 app.listen(port, () => {

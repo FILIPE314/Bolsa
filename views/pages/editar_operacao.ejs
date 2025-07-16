@@ -1,6 +1,6 @@
-<div class="container mt-5">
+<div class="container mt-5 animate-fade-in">
   <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-md-7 col-lg-6">
       <div class="card shadow">
         <div class="card-body">
           <h3 class="card-title text-center mb-4">Editar Operação</h3>
@@ -32,10 +32,16 @@
               <label for="inputPreco" class="form-label">Preço unitário</label>
               <input type="number" class="form-control" name="preco" id="inputPreco" required min="0.01" step="0.01" value="<%= operacao.preco %>">
             </div>
-            <button type="submit" class="btn btn-primary w-100">Salvar Alterações</button>
+            <button type="submit" class="btn btn-primary w-100 animate-bounce">Salvar Alterações</button>
           </form>
         </div>
       </div>
     </div>
   </div>
 </div>
+<style>
+.animate-fade-in { animation: fadeIn 1.2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
+.animate-bounce { transition: transform 0.2s; }
+.animate-bounce:hover { transform: translateY(-4px) scale(1.04); }
+</style>

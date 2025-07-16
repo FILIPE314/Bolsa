@@ -15,6 +15,8 @@ function requireLogin(req, res, next) {
 
 router.use(function(req, res, next) {
   res.locals.user = req.session.user;
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
   next();
 });
 
@@ -119,6 +121,13 @@ router.get('/register', function (req, res) {
 router.get('/logout', function (req, res) {
   req.session.destroy(() => {
     res.redirect('/login');
+  });
+});
+
+router.get('/contato', function (req, res) {
+  res.render('pages/contato', {
+    title: 'Contato',
+    paginaAtiva: 'contato'
   });
 });
 

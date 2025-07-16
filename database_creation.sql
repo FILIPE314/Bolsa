@@ -1,5 +1,6 @@
 CREATE TABLE operacoes(
     id SERIAL NOT NULL,
+    usuario_id INTEGER,
     "data" date NOT NULL,
     ativo varchar(6) NOT NULL,
     tipo_de_operacao varchar(10) NOT NULL,
