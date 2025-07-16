@@ -1,5 +1,6 @@
 const pool = require('../db/postgres');
 const bcrypt = require('bcrypt');
+const validator = require('validator');
 
 class Usuario {
     constructor(data) {
@@ -38,6 +39,34 @@ Usuario.findByEmail = function (email) {
             }
         });
     });
+}
+
+Usuario.prototype.validateRegister = function () {
+    this.errors = [];
+    const { nome, email, senha } = this.data;
+    if (!nome || !email || !senha) {
+        this.errors.push('Preencha todos os campos.');
+    } else {
+        if (!validator.isEmail(email)) {
+            this.errors.push('E-mail inválido.');
+        }
+        if (senha.length < 6) {
+            this.errors.push('A senha deve ter pelo menos 6 caracteres.');
+        }
+        if (nome.trim().length < 2) {
+            this.errors.push('O nome deve ter pelo menos 2 caracteres.');
+        }
+    }
+    return this.errors.length === 0;
+}
+
+Usuario.prototype.validateLogin = function () {
+    this.errors = [];
+    const { email, senha } = this.data;
+    if (!email || !senha) {
+        this.errors.push('Preencha todos os campos.');
+    }
+    return this.errors.length === 0;
 }
 
 module.exports = Usuario; 

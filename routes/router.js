@@ -4,21 +4,10 @@ const router = express.Router()
 const operacaoController = require('../controllers/operacao-controller')
 const authController = require('../controllers/auth-controller')
 const Operacao = require('../models/operacao')
+const requireLogin = require('../middleware/requireLogin')
+const setLocals = require('../middleware/setLocals')
 
-
-function requireLogin(req, res, next) {
-  if (!req.session.user) {
-    return res.redirect('/login');
-  }
-  next();
-}
-
-router.use(function(req, res, next) {
-  res.locals.user = req.session.user;
-  res.locals.success = req.flash('success');
-  res.locals.error = req.flash('error');
-  next();
-});
+router.use(setLocals)
 
 /* ----- funções de roteamento ----- */
 router.get('/', function (req, res) {
