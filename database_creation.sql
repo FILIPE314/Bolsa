@@ -24,3 +24,11 @@ CREATE TABLE usuarios (
     email VARCHAR(100) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL
 );
+
+CREATE TABLE "session" (
+  "sid" varchar NOT NULL COLLATE "default",
+  "sess" json NOT NULL,
+  "expire" timestamp(6) NOT NULL,
+  PRIMARY KEY ("sid")
+);
+CREATE INDEX "IDX_session_expire" ON "session" ("expire");

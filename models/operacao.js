@@ -93,15 +93,7 @@ Operacao.readAllByUser = function (usuario_id) {
             if (error) {
                 reject('Erro ao buscar operações: ' + error);
             } else {
-                // Mapeia os campos para camelCase para compatibilidade com a view
-                const operacoes = result.rows.map(op => ({
-                    ...op,
-                    tipoDeOperacao: op.tipo_de_operacao,
-                    valorBruto: op.valor_bruto,
-                    taxaB3: op.taxa_b3,
-                    valorLiquido: op.valor_liquido
-                }));
-                resolve(operacoes);
+                resolve(result.rows);
             }
         });
     });
@@ -114,14 +106,20 @@ Operacao.readAllByUserAndAtivo = function (usuario_id, ativo) {
             if (error) {
                 reject('Erro ao buscar operações: ' + error);
             } else {
-                const operacoes = result.rows.map(op => ({
-                    ...op,
-                    tipoDeOperacao: op.tipo_de_operacao,
-                    valorBruto: op.valor_bruto,
-                    taxaB3: op.taxa_b3,
-                    valorLiquido: op.valor_liquido
-                }));
-                resolve(operacoes);
+                resolve(result.rows);
+            }
+        });
+    });
+}
+
+Operacao.findByIdAndUser = function (id, usuario_id) {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM operacoes WHERE id = $1 AND usuario_id = $2';
+        pool.query(query, [id, usuario_id], (error, result) => {
+            if (error) {
+                reject('Erro ao buscar operação: ' + error);
+            } else {
+                resolve(result.rows[0]);
             }
         });
     });
@@ -148,6 +146,38 @@ Operacao.prototype.update = function (id, usuario_id) {
 }
 
 Operacao.delete = function (id, usuario_id) {
+    return new Promise((resolve, reject) => {
+        const query = 'DELETE FROM operacoes WHERE id = $1 AND usuario_id = $2';
+        pool.query(query, [id, usuario_id], (error, result) => {
+            if (error) {
+                reject('Erro ao excluir operação: ' + error);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
+Operacao.updateByIdAndUser = function (id, usuario_id, data) {
+    return new Promise((resolve, reject) => {
+        let quantidade = Number(data.quantidade);
+        let preco = Number(data.preco);
+        const valorBruto = preco * quantidade;
+        const taxaB3 = valorBruto * 0.0003;
+        const valorLiquido = data.tipoDeOperacao === 'compra' ? (valorBruto + taxaB3) : (valorBruto - taxaB3);
+        const query = `UPDATE operacoes SET data = $1, ativo = $2, tipo_de_operacao = $3, quantidade = $4, preco = $5, valor_bruto = $6, taxa_b3 = $7, valor_liquido = $8 WHERE id = $9 AND usuario_id = $10`;
+        const params = [data.data, data.ativo, data.tipoDeOperacao, quantidade, preco, valorBruto, taxaB3, valorLiquido, id, usuario_id];
+        pool.query(query, params, (error, result) => {
+            if (error) {
+                reject('Erro ao atualizar operação: ' + error);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
+Operacao.deleteByIdAndUser = function (id, usuario_id) {
     return new Promise((resolve, reject) => {
         const query = 'DELETE FROM operacoes WHERE id = $1 AND usuario_id = $2';
         pool.query(query, [id, usuario_id], (error, result) => {

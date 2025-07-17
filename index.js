@@ -31,7 +31,10 @@ o valor verdadeiro indica que o body-parser vai aceitar objetos aninhados ou qua
 app.use(express.urlencoded({ extended: false }))
 
 const session = require('express-session')
+const pgSession = require('connect-pg-simple')(session)
+const pool = require('./db/postgres')
 app.use(session({
+    store: new pgSession({ pool }),
     secret: 'segredo_super_secreto',
     resave: false,
     saveUninitialized: false,
